@@ -46,11 +46,10 @@ EpollDemultiplexer::~EpollDemultiplexer() {
 int EpollDemultiplexer::register_handler(EventHandler* handler, Event evt) {
     struct epoll_event ev;
     ev.data.ptr = (void*) handler;
-    ev.events = 0;
 
     // 判断需要注册什么事件
     if (evt & ReadEvent) {  // 如果需要监听读事件
-        ev.events |= EPOLLIN;   // 读事件
+        ev.events = EPOLLIN;   // 读事件
         ev.events |= EPOLLET;   // 设定边缘触发
     }  
     if (evt & WriteEvent) { // 如果需要监听写事件

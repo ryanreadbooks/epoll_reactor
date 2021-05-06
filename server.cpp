@@ -6,7 +6,7 @@
 
 int main(int argc, char const *argv[])
 {
-    
+    int a = 10;
     ListenHandler handler;
     handler.listen_on(9527);
     Reactor& reactor = Reactor::get_instance();

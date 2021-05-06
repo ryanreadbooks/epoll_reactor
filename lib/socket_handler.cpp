@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 
 #include "socket_handler.h"
-
+#include "reactor.h"
 
 
 SockHandler::SockHandler(Handle fd) : fd_(fd), buf(new char[MAX_SIZE]) {
@@ -32,12 +32,14 @@ void SockHandler::handle_read() {
     // echo服务器，业务逻辑
     int n = read(this->fd_, this->buf, MAX_SIZE);
     this->buf[n] = '\0';
-    printf("read n = %d, content = %s\n", n, this->buf);
     if (n > 0) {
+        printf("read n = %d, content = %s\n", n, this->buf);
         write(this->fd_, buf, strlen(buf)); // 内容原封不动写回去
     } else if (n == 0){ 
         // 对端关闭
         printf("client %d closed\n", this->fd_);
+        Reactor& reactor = Reactor::get_instance();
+        reactor.remove_handler(this);
         close(this->fd_);
     } else if (n == -1){
         // 出错

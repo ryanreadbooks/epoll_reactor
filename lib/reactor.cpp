@@ -14,6 +14,7 @@ int ReactorImpl::register_handler(EventHandler* handler, Event evt) {
 
 void ReactorImpl::remove_handler(EventHandler* handler) {
     demultiplexer->remove_handler(handler->get_handle());
+    delete handler;
 }
 
 void ReactorImpl::event_loop(int timeout) { 
